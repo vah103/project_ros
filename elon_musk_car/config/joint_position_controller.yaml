@@ -1,0 +1,10 @@
+gazebo_ros_control:
+  pid_gains:
+    truc1_jt:
+      p: 10.0
+      i: 0.01
+      d: 0.1
+    truc2_jt:
+      p: 10.0
+      i: 0.01
+      d: 0.1

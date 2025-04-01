@@ -1,0 +1,9 @@
+truc1_jt_position_controller:
+  type: position_controllers/JointPositionController
+  joint: truc1_jt
+  pid: {p: 10.0, i: 0.01, d: 0.1}
+
+truc2_jt_position_controller:
+  type: position_controllers/JointPositionController
+  joint: truc2_jt
+  pid: {p: 10.0, i: 0.01, d: 0.1}

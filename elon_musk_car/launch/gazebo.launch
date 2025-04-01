@@ -1,0 +1,40 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+  <node name="tf_footprint_base"
+        pkg="tf"
+        type="static_transform_publisher"
+        args="0 0 0 0 0 0 base_link base_footprint 40" />
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find elon_musk_car)/urdf/elon_musk_car.urdf'" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+  <node name="spawn_model"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        args="-param robot_description -urdf -model elon_musk_car"
+        output="screen" />
+
+  <rosparam command="load" file="$(find elon_musk_car)/config/joint_position_controller.yaml" />
+  <rosparam file="$(find elon_musk_car)/config/arm_controller.yaml" command="load" />
+
+  <node name="controller_spawner"
+        pkg="controller_manager"
+        type="spawner"
+        args="truc1_jt_position_controller truc2_jt_position_controller"
+        output="screen" />
+
+  <node name="rqt_tf_tree" pkg="rqt_tf_tree" type="rqt_tf_tree" required="false"
+        launch-prefix="bash -c 'sleep 8; exec rosrun rqt_tf_tree rqt_tf_tree'" />
+
+  <node name="rviz"
+        pkg="rviz"
+        type="rviz"
+        args="-d $(find elon_musk_car)/rviz/elon_musk_car_config.rviz"
+        output="screen" />
+        
+
+
+</launch>
