@@ -14,21 +14,20 @@ def main():
     print("+: tăng tốc độ | -: giảm tốc độ")
     print("u: nhập vị trí cho tay máy")
 
-    # Trạng thái hiện tại
-    current_linear = 0.5  # tốc độ mặc định
+    current_linear = 0.5  
     current_angular = 0.0
-    current_truc1 = 0.0  #tay máy 1
-    current_truc2 = 0.0  #tay máy 2
+    current_truc1 = 0.0  
+    current_truc2 = 0.0 
 
     while not rospy.is_shutdown():
         key = input(">> Nhập lệnh (w/s/a/d/x/q/+/-/u): ")
 
         if key == 'w':
             current_linear = 0.5
-            current_angular = 0.0  # reset quay
+            current_angular = 0.0  
         elif key == 's':
             current_linear = -0.5
-            current_angular = 0.0  # reset quay
+            current_angular = 0.0  
         elif key == 'a':
             current_angular = 1.0
         elif key == 'd':
@@ -46,14 +45,13 @@ def main():
             print(f"Tốc độ tiến/lùi hiện tại: {current_linear} m/s")
         elif key == '-':
             current_linear -= 0.1
-            if current_linear < 0.0:  #Giới hạn tốc độ tối thiểu 
+            if current_linear < 0.0: 
                 current_linear = 0.0
             print(f"Tốc độ tiến/lùi hiện tại: {current_linear} m/s")
         
-        # Nhập vị trí tay máy 
+        
         elif key == 'u':  
             try:
-                # yêu cầu nhập vị trí cho cả hai trục
                 current_truc1, current_truc2 = map(float, input("Nhập vị trí tay máy (trục 1, trục 2) cách nhau bằng dấu cách: ").split())
                 print(f"Vị trí tay máy 1 (truc1): {current_truc1}, Vị trí tay máy 2 (truc2): {current_truc2}")
             except ValueError:
@@ -63,13 +61,11 @@ def main():
             print("Lệnh không hợp lệ.")
             continue
 
-        # Gửi lệnh chuyển động robot
         twist = Twist()
         twist.linear.x = current_linear
         twist.angular.z = current_angular
         pub_cmd_vel.publish(twist)
 
-        # Gửi lệnh điều khiển tay máy (Cả hai trục cùng lúc)
         pub_truc1.publish(current_truc1)
         pub_truc2.publish(current_truc2)
 
